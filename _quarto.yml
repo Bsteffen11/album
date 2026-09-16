@@ -1,8 +1,10 @@
 project:
   type: website
+  resources:
+    - "data/*"
 
 website:
-  title: "website"
+  title: "Taylor Swift Album Gallery"
   navbar:
     left:
       - href: index.qmd
