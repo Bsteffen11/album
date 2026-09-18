@@ -14,9 +14,9 @@ Explore and compare cover art across all 11 Taylor Swift studio album eras.
 ::: {.album-explorer style="max-width: 720px; margin: 0 auto; text-align: center;"}
 
 ```{=html}
-<div class="mb-4">
-  <label for="album-select" class="form-label fw-bold">Select an Album:</label>
-  <select id="album-select" class="form-select form-select-lg" style="max-width: 450px; margin: 0 auto;">
+<div class="mb-4 d-flex justify-content-center align-items-center gap-2 flex-wrap">
+  <label for="album-select" class="form-label fw-bold mb-0">Select an Album:</label>
+  <select id="album-select" class="form-select form-select-lg" style="max-width: 380px;">
     <option value="0">Taylor Swift (2006)</option>
     <option value="1">Fearless (2008)</option>
     <option value="2">Speak Now (2010)</option>
@@ -29,15 +29,31 @@ Explore and compare cover art across all 11 Taylor Swift studio album eras.
     <option value="9">Midnights (2022)</option>
     <option value="10">The Tortured Poets Department (2024)</option>
   </select>
+  <button id="btn-random" class="btn btn-outline-dark btn-sm px-3 py-2 shadow-sm" title="Pick a random era">🎲 Random Era</button>
 </div>
 
-<div class="card shadow-sm border-0 mb-4 p-3 bg-light" style="border-radius: 16px;">
-  <div class="d-flex justify-content-center">
-    <img id="album-cover" src="data/07_lover.jpg" alt="Album Cover" class="img-fluid rounded shadow" style="max-height: 400px; object-fit: contain;">
+<div id="card-container" class="card shadow border-0 mb-4 p-4 album-card-container">
+  <div class="d-flex justify-content-center mb-3">
+    <div class="vinyl-wrapper" id="vinyl-wrap">
+      <div class="vinyl-record" id="vinyl-disc">
+        <div class="vinyl-label">
+          <img id="vinyl-label-img" src="data/07_lover.jpg" alt="Vinyl Label">
+        </div>
+      </div>
+      <img id="album-cover" src="data/07_lover.jpg" alt="Album Cover" class="album-sleeve img-fluid" style="max-height: 340px; max-width: 340px; object-fit: contain;">
+    </div>
   </div>
-  <div class="card-body">
-    <h3 id="album-title" class="card-title mt-2 fw-bold">Lover</h3>
-    <p id="album-meta" class="text-muted mb-0">Released in 2019 &bull; Album #7</p>
+  
+  <div class="card-body text-center">
+    <div id="aoty-badge" class="mb-2"></div>
+    <h2 id="album-title" class="card-title fw-bold mb-1">Lover</h2>
+    <p id="album-meta" class="text-muted mb-2">Released in 2019 &bull; Album #7</p>
+    <div id="era-stats" class="d-flex flex-wrap justify-content-center gap-2 mb-3"></div>
+    
+    <!-- Live Spotify Audio Player -->
+    <div class="mt-3" style="max-width: 480px; margin: 0 auto;">
+      <iframe id="spotify-player" style="border-radius:12px; width: 100%; height: 152px;" src="https://open.spotify.com/embed/album/1NAmidJlEaVgA3MpcGiga5?utm_source=generator&theme=0" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
   </div>
 </div>
 
@@ -80,50 +96,174 @@ Compare the visual styles, color palettes, and eras of any two albums side-by-si
 
 <script>
 const albums = [
-  { title: "Taylor Swift", year: 2006, file: "data/01_taylor_swift.jpg", num: 1, vibe: "Country / Debut" },
-  { title: "Fearless", year: 2008, file: "data/02_fearless.jpg", num: 2, vibe: "Country Pop / Golden Glow" },
-  { title: "Speak Now", year: 2010, file: "data/03_speak_now.jpg", num: 3, vibe: "Country Rock / Fairytale Purple" },
-  { title: "Red", year: 2012, file: "data/04_red.jpg", num: 4, vibe: "Pop & Heartbreak / Crimson" },
-  { title: "1989", year: 2014, file: "data/05_1989.jpg", num: 5, vibe: "80s Synth-pop / Polaroid" },
-  { title: "reputation", year: 2017, file: "data/06_reputation.jpg", num: 6, vibe: "Electropop / Monochrome Gothic" },
-  { title: "Lover", year: 2019, file: "data/07_lover.jpg", num: 7, vibe: "Pastel Pop / Dreamy Sunset" },
-  { title: "folklore", year: 2020, file: "data/08_folklore.jpg", num: 8, vibe: "Indie Folk / Misty Woodland" },
-  { title: "evermore", year: 2020, file: "data/09_evermore.jpg", num: 9, vibe: "Alternative / Winter Plaid" },
-  { title: "Midnights", year: 2022, file: "data/10_midnights.jpg", num: 10, vibe: "Late-night Pop / Vintage Haze" },
-  { title: "The Tortured Poets Department", year: 2024, file: "data/11_the_tortured_poets_department.jpg", num: 11, vibe: "Literary Pop / Sepia & Shadows" }
+  { 
+    title: "Taylor Swift", year: 2006, file: "data/01_taylor_swift.jpg", num: 1, 
+    vibe: "Country / Debut", color: "#2b534b",
+    bg: "radial-gradient(circle at top, rgba(43,83,75,0.2) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(43,83,75,0.3)",
+    tracks: 14, runtime: "53 min", aoty: false,
+    spotify: "7mzrGJOP4LcmscgcqVpFFe",
+    highlights: "Tim McGraw, Teardrops on My Guitar"
+  },
+  { 
+    title: "Fearless", year: 2008, file: "data/02_fearless.jpg", num: 2, 
+    vibe: "Country Pop / Golden Glow", color: "#c6922e",
+    bg: "radial-gradient(circle at top, rgba(198,146,46,0.22) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(198,146,46,0.35)",
+    tracks: 13, runtime: "53 min", aoty: true,
+    spotify: "4hDok0OAJd579HG7Db0vR1",
+    highlights: "Love Story, You Belong With Me"
+  },
+  { 
+    title: "Speak Now", year: 2010, file: "data/03_speak_now.jpg", num: 3, 
+    vibe: "Country Rock / Fairytale Purple", color: "#743a6d",
+    bg: "radial-gradient(circle at top, rgba(116,58,109,0.2) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(116,58,109,0.3)",
+    tracks: 14, runtime: "67 min", aoty: false,
+    spotify: "5AEDGbliTTfjOB8WBixt4v",
+    highlights: "Mine, Back to December, Enchanted"
+  },
+  { 
+    title: "Red", year: 2012, file: "data/04_red.jpg", num: 4, 
+    vibe: "Pop & Heartbreak / Crimson", color: "#8b1e2c",
+    bg: "radial-gradient(circle at top, rgba(139,30,44,0.2) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(139,30,44,0.35)",
+    tracks: 16, runtime: "65 min", aoty: false,
+    spotify: "6kZDo2Bmxvf6je80qaDYQZ",
+    highlights: "All Too Well, I Knew You Were Trouble"
+  },
+  { 
+    title: "1989", year: 2014, file: "data/05_1989.jpg", num: 5, 
+    vibe: "80s Synth-pop / Polaroid Sky", color: "#3d799f",
+    bg: "radial-gradient(circle at top, rgba(61,121,159,0.22) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(61,121,159,0.35)",
+    tracks: 13, runtime: "48 min", aoty: true,
+    spotify: "64LU4c1nfjz19WqaKaKyYU",
+    highlights: "Blank Space, Style, Shake It Off"
+  },
+  { 
+    title: "reputation", year: 2017, file: "data/06_reputation.jpg", num: 6, 
+    vibe: "Electropop / Monochrome Gothic", color: "#1f1f1f",
+    bg: "radial-gradient(circle at top, rgba(31,31,31,0.25) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(0,0,0,0.45)",
+    tracks: 15, runtime: "55 min", aoty: false,
+    spotify: "6AYBbNvdHSvCg9gq1kHwD3",
+    highlights: "Delicate, Look What You Made Me Do"
+  },
+  { 
+    title: "Lover", year: 2019, file: "data/07_lover.jpg", num: 7, 
+    vibe: "Pastel Pop / Dreamy Sunset", color: "#d2678f",
+    bg: "radial-gradient(circle at top, rgba(235,137,181,0.25) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(210,103,143,0.35)",
+    tracks: 18, runtime: "61 min", aoty: false,
+    spotify: "1NAmidJlEaVgA3MpcGiga5",
+    highlights: "Cruel Summer, Lover, The Archer"
+  },
+  { 
+    title: "folklore", year: 2020, file: "data/08_folklore.jpg", num: 8, 
+    vibe: "Indie Folk / Misty Woodland", color: "#505450",
+    bg: "radial-gradient(circle at top, rgba(80,84,80,0.22) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(80,84,80,0.35)",
+    tracks: 16, runtime: "63 min", aoty: true,
+    spotify: "2fenSS6SVk5IP4ZGFUp9wY",
+    highlights: "cardigan, august, exile"
+  },
+  { 
+    title: "evermore", year: 2020, file: "data/09_evermore.jpg", num: 9, 
+    vibe: "Alternative / Winter Plaid", color: "#784b2c",
+    bg: "radial-gradient(circle at top, rgba(120,75,44,0.22) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(120,75,44,0.35)",
+    tracks: 15, runtime: "60 min", aoty: false,
+    spotify: "2Xoteh7FGyzTIewZe2Pj4f",
+    highlights: "willow, champagne problems, gold rush"
+  },
+  { 
+    title: "Midnights", year: 2022, file: "data/10_midnights.jpg", num: 10, 
+    vibe: "Late-night Pop / Vintage Haze", color: "#283759",
+    bg: "radial-gradient(circle at top, rgba(40,55,89,0.25) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(40,55,89,0.4)",
+    tracks: 13, runtime: "44 min", aoty: true,
+    spotify: "151w1FgRZfnKZA9FEcg9Z3",
+    highlights: "Anti-Hero, Karma, Lavender Haze"
+  },
+  { 
+    title: "The Tortured Poets Department", year: 2024, file: "data/11_the_tortured_poets_department.jpg", num: 11, 
+    vibe: "Literary Pop / Sepia & Shadows", color: "#544e45",
+    bg: "radial-gradient(circle at top, rgba(84,78,69,0.22) 0%, rgba(255,255,255,0.9) 70%)",
+    glow: "0 15px 35px rgba(84,78,69,0.35)",
+    tracks: 16, runtime: "65 min", aoty: false,
+    spotify: "1Mo4aZ8pdj6k1crs5vdEv0",
+    highlights: "Fortnight, I Can Do It With a Broken Heart"
+  }
 ];
 
-// Single Explorer Logic
+// Explorer Elements
 const select = document.getElementById("album-select");
 const cover = document.getElementById("album-cover");
 const title = document.getElementById("album-title");
 const meta = document.getElementById("album-meta");
 const grid = document.getElementById("thumb-grid");
+const vinylLabel = document.getElementById("vinyl-label-img");
+const cardContainer = document.getElementById("card-container");
+const aotyBadge = document.getElementById("aoty-badge");
+const eraStats = document.getElementById("era-stats");
+const spotifyPlayer = document.getElementById("spotify-player");
+const vinylWrap = document.getElementById("vinyl-wrap");
 
 function showAlbum(index) {
   const a = albums[index];
   cover.src = a.file;
   cover.alt = a.title + " Album Cover";
+  vinylLabel.src = a.file;
   title.textContent = a.title;
-  meta.textContent = `${a.vibe} • Released in ${a.year} • Album #${a.num}`;
+  title.style.color = a.color;
+  meta.textContent = `${a.vibe} • Released in ${a.year} • Studio Album #${a.num}`;
   select.value = index;
   
+  // Ambient glow & background styling
+  cardContainer.style.background = a.bg;
+  cardContainer.style.boxShadow = a.glow;
+  
+  // AOTY Grammy Badge
+  if (a.aoty) {
+    aotyBadge.innerHTML = `<span class="badge rounded-pill px-3 py-2 text-white" style="background-color: ${a.color}; font-size: 0.85rem;">🏆 Grammy Album of the Year Winner</span>`;
+  } else {
+    aotyBadge.innerHTML = "";
+  }
+  
+  // Era Stats Badges
+  eraStats.innerHTML = `
+    <span class="badge bg-white text-dark border shadow-sm">🎵 ${a.tracks} Tracks</span>
+    <span class="badge bg-white text-dark border shadow-sm">⏱️ ${a.runtime}</span>
+    <span class="badge bg-white text-dark border shadow-sm">✨ ${a.highlights}</span>
+  `;
+  
+  // Live Spotify Player
+  spotifyPlayer.src = `https://open.spotify.com/embed/album/${a.spotify}?utm_source=generator&theme=0`;
+  
+  // Activate vinyl spin animation
+  vinylWrap.classList.remove("is-playing");
+  void vinylWrap.offsetWidth; // trigger reflow
+  vinylWrap.classList.add("is-playing");
+  
+  // Thumbnails outline
   document.querySelectorAll(".thumb-btn").forEach((btn, i) => {
-    btn.style.outline = (i == index) ? "3px solid #0d6efd" : "none";
-    btn.style.opacity = (i == index) ? "1" : "0.7";
+    btn.style.outline = (i == index) ? `3px solid ${a.color}` : "none";
+    btn.style.opacity = (i == index) ? "1" : "0.65";
   });
 }
 
+// Build Thumbnail Navigation
 albums.forEach((a, index) => {
   const img = document.createElement("img");
   img.src = a.file;
   img.alt = a.title;
   img.title = `${a.title} (${a.year})`;
   img.className = "thumb-btn rounded shadow-sm";
-  img.style = "width: 52px; height: 52px; object-fit: cover; cursor: pointer; transition: all 0.15s ease;";
+  img.style = "width: 52px; height: 52px; object-fit: cover; cursor: pointer; transition: all 0.2s ease;";
   img.onclick = () => showAlbum(index);
   img.onmouseover = () => { if (select.value != index) img.style.opacity = "1"; };
-  img.onmouseout = () => { if (select.value != index) img.style.opacity = "0.7"; };
+  img.onmouseout = () => { if (select.value != index) img.style.opacity = "0.65"; };
   grid.appendChild(img);
 });
 
@@ -153,19 +293,34 @@ function updateCompare(side, index) {
   if (side === "left") {
     imgLeft.src = a.file;
     titleLeft.textContent = a.title;
-    metaLeft.textContent = `${a.vibe} (${a.year})`;
+    titleLeft.style.color = a.color;
+    metaLeft.innerHTML = `<strong>${a.vibe}</strong><br>${a.year} • ${a.tracks} tracks • ${a.runtime}<br><small class="text-muted">${a.highlights}</small>`;
   } else {
     imgRight.src = a.file;
     titleRight.textContent = a.title;
-    metaRight.textContent = `${a.vibe} (${a.year})`;
+    titleRight.style.color = a.color;
+    metaRight.innerHTML = `<strong>${a.vibe}</strong><br>${a.year} • ${a.tracks} tracks • ${a.runtime}<br><small class="text-muted">${a.highlights}</small>`;
   }
 }
 
 selLeft.addEventListener("change", (e) => updateCompare("left", parseInt(e.target.value)));
 selRight.addEventListener("change", (e) => updateCompare("right", parseInt(e.target.value)));
 
-// Initialize defaults
-showAlbum(6); // Lover
+// Random Era Handler
+const btnRandom = document.getElementById("btn-random");
+if (btnRandom) {
+  btnRandom.addEventListener("click", () => {
+    const current = parseInt(select.value);
+    let next;
+    do {
+      next = Math.floor(Math.random() * albums.length);
+    } while (next === current);
+    showAlbum(next);
+  });
+}
+
+// Initialize with Lover
+showAlbum(6);
 selLeft.value = 5; // reputation
 updateCompare("left", 5);
 selRight.value = 6; // Lover
@@ -173,4 +328,49 @@ updateCompare("right", 6);
 </script>
 ```
 
+## Era Analytics
+
+Explore how album runtime and track counts have evolved across Taylor Swift's career, highlighted by Grammy Album of the Year victories. Hover over any point to inspect that era's details.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(plotly)
+
+era_stats <- tibble(
+  album = c("Taylor Swift", "Fearless", "Speak Now", "Red", "1989", "reputation", "Lover", "folklore", "evermore", "Midnights", "The Tortured Poets Department"),
+  year = c(2006, 2008, 2010, 2012, 2014, 2017, 2019, 2020, 2020, 2022, 2024),
+  tracks = c(14, 13, 14, 16, 13, 15, 18, 16, 15, 13, 16),
+  runtime = c(53, 53, 67, 65, 48, 55, 61, 63, 60, 44, 65),
+  aoty = c("No", "Yes (2010)", "No", "No", "Yes (2016)", "No", "No", "Yes (2021)", "No", "Yes (2024)", "No"),
+  color = c("#2b534b", "#c6922e", "#743a6d", "#8b1e2c", "#3d799f", "#1f1f1f", "#d2678f", "#505450", "#784b2c", "#283759", "#544e45")
+)
+
+p <- era_stats |>
+  ggplot(aes(
+    x = year, 
+    y = runtime, 
+    size = tracks, 
+    color = album, 
+    text = paste0("<b>", album, "</b> (", year, ")<br>Runtime: ", runtime, " mins<br>Tracks: ", tracks, "<br>Grammy AOTY: ", aoty)
+  )) +
+  geom_point(alpha = 0.85) +
+  scale_color_manual(values = setNames(era_stats$color, era_stats$album)) +
+  scale_size(range = c(5, 13)) +
+  labs(
+    title = "Album Runtime & Track Count Across Eras",
+    x = "Release Year",
+    y = "Runtime (minutes)",
+    size = "Tracks"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none")
+
+ggplotly(p, tooltip = "text")
+```
+
 :::
+
